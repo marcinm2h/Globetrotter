@@ -6,5 +6,17 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="moch.marcin.globetrotter.ui.login.LoginFragment"
-        android:label="LoginFragment" />
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/login"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="moch.marcin.globetrotter.ui.home.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/back"
+            app:destination="@id/loginFragment" />
+    </fragment>
 </navigation>

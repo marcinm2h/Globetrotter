@@ -1,14 +1,14 @@
-package moch.marcin.globetrotter.ui.login
+package moch.marcin.globetrotter.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 enum class NavigationActions {
-    LOGIN
+    BACK
 }
 
-class LoginViewModel(arg: String) : ViewModel() {
+class HomeViewModel(arg: String) : ViewModel() {
     val state = MutableLiveData<String>()
 
     private val _navigationActionEvent = MutableLiveData<NavigationActions?>()
@@ -20,11 +20,12 @@ class LoginViewModel(arg: String) : ViewModel() {
         _navigationActionEvent.value = null
     }
 
+
     init {
         state.value = arg
     }
 
-    fun onLogin() {
-        _navigationActionEvent.value = NavigationActions.LOGIN;
+    fun onBack() {
+        _navigationActionEvent.value = NavigationActions.BACK;
     }
 }
