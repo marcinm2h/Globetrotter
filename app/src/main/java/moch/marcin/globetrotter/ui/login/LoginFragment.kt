@@ -10,16 +10,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
-import moch.marcin.globetrotter.LoginActivity
 import moch.marcin.globetrotter.MainActivity
+import moch.marcin.globetrotter.OnLogin
 import moch.marcin.globetrotter.R
 import moch.marcin.globetrotter.databinding.FragmentLoginBinding
 
-class LoginFragment : Fragment() {
+class LoginFragment : Fragment(), OnLogin {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,8 +41,10 @@ class LoginFragment : Fragment() {
 //                    NavigationActions.LOGIN -> LoginFragmentDirections.login()
 //                    NavigationActions.LOGIN -> createSignInIntent()
                     NavigationActions.LOGIN -> {
-                        MainActivity.loggedIn = true
-                        (activity as LoginActivity).onLogin()
+                        when (val activity = requireActivity()) {
+                            is OnLogin -> activity.onLogin()
+                            else -> onLogin()
+                        }
                     }
                 }
 //                findNavController().navigate(action)
@@ -64,12 +65,10 @@ class LoginFragment : Fragment() {
 
     }
 
-
-
+    // https://github.com/firebase/snippets-android/blob/e16846813135fde4fd6e8823948cfae61e17fd57/auth/app/src/main/java/com/google/firebase/quickstart/auth/kotlin/MainActivity.kt
     private fun createSignInIntent() {
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
-//            AuthUI.IdpConfig.PhoneBuilder().build(),
             AuthUI.IdpConfig.GoogleBuilder().build()
         )
 
@@ -78,12 +77,12 @@ class LoginFragment : Fragment() {
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
                 .build(),
-            RC_SIGN_IN)
+            RC_SIGN_IN
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == RC_SIGN_IN) {
             val response = IdpResponse.fromResultIntent(data)
             if (resultCode == Activity.RESULT_OK) {
@@ -100,15 +99,11 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun signOut() {
-        AuthUI.getInstance()
-            .signOut(requireContext())
-            .addOnCompleteListener {
-                // ...
-            }
-    }
-
     companion object {
         private const val RC_SIGN_IN = 123
+    }
+
+    override fun onLogin() {
+        TODO("not implemented")
     }
 }

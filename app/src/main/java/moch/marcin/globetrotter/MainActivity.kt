@@ -9,12 +9,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (!loggedIn) {
-            redirectToLoginActivity()
+            return redirectToLogin()
         }
         setContentView(R.layout.activity_main)
     }
 
-    private fun redirectToLoginActivity() {
+    private fun redirectToLogin() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()

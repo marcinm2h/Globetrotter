@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_grapgh"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_grapgh"
     app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="moch.marcin.globetrotter.ui.home.HomeFragment"
-        android:label="HomeFragment" >
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/showDetails"
             app:destination="@id/detailsFragment" />
@@ -20,7 +23,8 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="moch.marcin.globetrotter.ui.details.DetailsFragment"
-        android:label="DetailsFragment" >
+        android:label="DetailsFragment"
+        tools:layout="@layout/fragment_details">
         <action
             android:id="@+id/back"
             app:destination="@id/homeFragment" />
@@ -31,7 +35,8 @@
     <fragment
         android:id="@+id/createEditFragment"
         android:name="moch.marcin.globetrotter.ui.create_edit.CreateEditFragment"
-        android:label="CreateEditFragment" >
+        android:label="CreateEditFragment"
+        tools:layout="@layout/fragment_create_edit">
         <action
             android:id="@+id/backToDetails"
             app:destination="@id/detailsFragment" />
@@ -42,7 +47,8 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="moch.marcin.globetrotter.ui.map.MapFragment"
-        android:label="MapFragment" >
+        android:label="MapFragment"
+        tools:layout="@layout/fragment_map">
         <action
             android:id="@+id/back"
             app:destination="@id/homeFragment" />

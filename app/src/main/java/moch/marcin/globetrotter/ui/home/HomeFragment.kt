@@ -24,7 +24,7 @@ class HomeFragment : Fragment() {
                 R.layout.fragment_home, container, false
             )
 
-        val viewModel = createViewModel("Hello")
+        val viewModel = createViewModel()
 
         binding.viewModel = viewModel
 
@@ -45,8 +45,8 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    private fun createViewModel(arg: String): HomeViewModel {
-        val viewModelFactory = HomeViewModelFactory(arg)
+    private fun createViewModel(): HomeViewModel {
+        val viewModelFactory = HomeViewModelFactory()
 
         return ViewModelProviders.of(this, viewModelFactory)
             .get(HomeViewModel::class.java)
