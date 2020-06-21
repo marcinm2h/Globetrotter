@@ -1,4 +1,4 @@
-package moch.marcin.globetrotter.ui.details
+package moch.marcin.globetrotter.ui.create_edit
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,18 +10,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import moch.marcin.globetrotter.R
-import moch.marcin.globetrotter.databinding.FragmentDetailsBinding
+import moch.marcin.globetrotter.databinding.FragmentCreateEditBinding
 
-class DetailsFragment : Fragment() {
+class CreateEditFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentDetailsBinding =
+        val binding: FragmentCreateEditBinding =
             DataBindingUtil.inflate(
                 inflater,
-                R.layout.fragment_details, container, false
+                R.layout.fragment_create_edit, container, false
             )
 
         val viewModel = createViewModel("Hello")
@@ -31,8 +31,7 @@ class DetailsFragment : Fragment() {
         viewModel.navigationActionEvent.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 val action = when (it) {
-                    NavigationActions.BACK -> DetailsFragmentDirections.back()
-                    NavigationActions.EDIT -> DetailsFragmentDirections.edit()
+                    NavigationActions.BACK -> CreateEditFragmentDirections.backToDetails()
                 }
                 findNavController().navigate(action)
                 viewModel.doneNavigation()
@@ -44,11 +43,11 @@ class DetailsFragment : Fragment() {
         return binding.root
     }
 
-    private fun createViewModel(arg: String): DetailsViewModel {
-        val viewModelFactory = DetailsViewModelFactory(arg)
+    private fun createViewModel(arg: String): CreateEditViewModel {
+        val viewModelFactory = CreateEditViewModelFactory(arg)
 
         return ViewModelProviders.of(this, viewModelFactory)
-            .get(DetailsViewModel::class.java)
+            .get(CreateEditViewModel::class.java)
 
     }
 }

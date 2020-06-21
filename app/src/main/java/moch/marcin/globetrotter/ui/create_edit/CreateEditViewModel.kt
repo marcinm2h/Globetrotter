@@ -1,15 +1,14 @@
-package moch.marcin.globetrotter.ui.details
+package moch.marcin.globetrotter.ui.create_edit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 enum class NavigationActions {
-    BACK,
-    EDIT
+    BACK
 }
 
-class DetailsViewModel(arg: String) : ViewModel() {
+class CreateEditViewModel(arg: String) : ViewModel() {
     val state = MutableLiveData<String>()
 
     private val _navigationActionEvent = MutableLiveData<NavigationActions?>()
@@ -28,9 +27,5 @@ class DetailsViewModel(arg: String) : ViewModel() {
 
     fun onBack() {
         _navigationActionEvent.value = NavigationActions.BACK;
-    }
-
-    fun onEdit() {
-        _navigationActionEvent.value = NavigationActions.EDIT;
     }
 }

@@ -21,6 +21,9 @@
         <action
             android:id="@+id/showDetails"
             app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/create"
+            app:destination="@id/createEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"
@@ -28,6 +31,20 @@
         android:label="DetailsFragment" >
         <action
             android:id="@+id/back"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/edit"
+            app:destination="@id/createEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createEditFragment"
+        android:name="moch.marcin.globetrotter.ui.create_edit.CreateEditFragment"
+        android:label="CreateEditFragment" >
+        <action
+            android:id="@+id/backToDetails"
+            app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/backToHome"
             app:destination="@id/homeFragment" />
     </fragment>
 </navigation>
