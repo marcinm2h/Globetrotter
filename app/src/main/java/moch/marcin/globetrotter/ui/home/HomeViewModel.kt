@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 enum class NavigationActions {
-    BACK,
     CREATE,
     SHOW_MAP,
     SHOW_DETAILS,
@@ -23,13 +22,8 @@ class HomeViewModel(arg: String) : ViewModel() {
         _navigationActionEvent.value = null
     }
 
-
     init {
         state.value = arg
-    }
-
-    fun onBack() {
-        _navigationActionEvent.value = NavigationActions.BACK
     }
 
     fun onShowDetails() {

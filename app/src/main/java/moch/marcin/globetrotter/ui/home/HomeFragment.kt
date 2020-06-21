@@ -31,7 +31,6 @@ class HomeFragment : Fragment() {
         viewModel.navigationActionEvent.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 val action = when (it) {
-                    NavigationActions.BACK -> HomeFragmentDirections.back()
                     NavigationActions.CREATE -> HomeFragmentDirections.create()
                     NavigationActions.SHOW_DETAILS -> HomeFragmentDirections.showDetails()
                     NavigationActions.SHOW_MAP -> HomeFragmentDirections.showMap()
