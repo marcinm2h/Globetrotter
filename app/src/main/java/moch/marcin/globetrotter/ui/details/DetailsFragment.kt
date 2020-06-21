@@ -1,4 +1,4 @@
-package moch.marcin.globetrotter.ui.home
+package moch.marcin.globetrotter.ui.details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,18 +10,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import moch.marcin.globetrotter.R
-import moch.marcin.globetrotter.databinding.FragmentHomeBinding
+import moch.marcin.globetrotter.databinding.FragmentDetailsBinding
 
-class HomeFragment : Fragment() {
+class DetailsFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentHomeBinding =
+        val binding: FragmentDetailsBinding =
             DataBindingUtil.inflate(
                 inflater,
-                R.layout.fragment_home, container, false
+                R.layout.fragment_details, container, false
             )
 
         val viewModel = createViewModel("Hello")
@@ -31,8 +31,8 @@ class HomeFragment : Fragment() {
         viewModel.navigationActionEvent.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 val action = when (it) {
-                    NavigationActions.BACK -> HomeFragmentDirections.back()
-                    NavigationActions.SHOW_DETAILS -> HomeFragmentDirections.showDetails()
+                    NavigationActions.BACK -> DetailsFragmentDirections.back()
+//                    NavigationActions.EDIT -> DetailsFragmentDirections.edit()
                 }
                 findNavController().navigate(action)
                 viewModel.doneNavigation()
@@ -44,11 +44,11 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    private fun createViewModel(arg: String): HomeViewModel {
-        val viewModelFactory = HomeViewModelFactory(arg)
+    private fun createViewModel(arg: String): DetailsViewModel {
+        val viewModelFactory = DetailsViewModelFactory(arg)
 
         return ViewModelProviders.of(this, viewModelFactory)
-            .get(HomeViewModel::class.java)
+            .get(DetailsViewModel::class.java)
 
     }
 }
