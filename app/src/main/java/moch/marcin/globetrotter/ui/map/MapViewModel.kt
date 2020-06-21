@@ -1,15 +1,14 @@
-package moch.marcin.globetrotter.ui.create_edit
+package moch.marcin.globetrotter.ui.map
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 enum class NavigationActions {
-    BACK_TO_DETAILS,
-    BACK_TO_HOME
+    BACK
 }
 
-class CreateEditViewModel(arg: String) : ViewModel() {
+class MapViewModel(arg: String) : ViewModel() {
     val state = MutableLiveData<String>()
 
     private val _navigationActionEvent = MutableLiveData<NavigationActions?>()
@@ -21,16 +20,11 @@ class CreateEditViewModel(arg: String) : ViewModel() {
         _navigationActionEvent.value = null
     }
 
-
     init {
         state.value = arg
     }
 
-    fun onBackToDetails() {
-        _navigationActionEvent.value = NavigationActions.BACK_TO_DETAILS;
-    }
-
-    fun onBackToHome() {
-        _navigationActionEvent.value = NavigationActions.BACK_TO_HOME;
+    fun onBack() {
+        _navigationActionEvent.value = NavigationActions.BACK;
     }
 }

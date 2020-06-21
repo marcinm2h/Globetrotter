@@ -20,9 +20,9 @@
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Wstecz"
             android:onClick="@{() -> viewModel.onBack()}"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="Wstecz"
+            app:layout_constraintBottom_toTopOf="@+id/button4"
             app:layout_constraintEnd_toStartOf="@+id/button3"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +39,28 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/button" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="80dp"
+            android:onClick="@{() -> viewModel.onCreate()}"
+            android:text="Create"
+            app:layout_constraintBottom_toBottomOf="@+id/button4"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="204dp"
+            android:onClick="@{() -> viewModel.onShowMap()}"
+            android:text="Map"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button5"
+            app:layout_constraintHorizontal_bias="0.51"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

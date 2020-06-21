@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 
 enum class NavigationActions {
     BACK,
-    SHOW_DETAILS
+    CREATE,
+    SHOW_MAP,
+    SHOW_DETAILS,
 }
 
 class HomeViewModel(arg: String) : ViewModel() {
@@ -32,5 +34,13 @@ class HomeViewModel(arg: String) : ViewModel() {
 
     fun onShowDetails() {
         _navigationActionEvent.value = NavigationActions.SHOW_DETAILS
+    }
+
+    fun onShowMap() {
+        _navigationActionEvent.value = NavigationActions.SHOW_MAP
+    }
+
+    fun onCreate() {
+        _navigationActionEvent.value = NavigationActions.CREATE
     }
 }

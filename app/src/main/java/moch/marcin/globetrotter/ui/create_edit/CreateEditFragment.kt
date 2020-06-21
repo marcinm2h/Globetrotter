@@ -31,7 +31,8 @@ class CreateEditFragment : Fragment() {
         viewModel.navigationActionEvent.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 val action = when (it) {
-                    NavigationActions.BACK -> CreateEditFragmentDirections.backToDetails()
+                    NavigationActions.BACK_TO_DETAILS -> CreateEditFragmentDirections.backToDetails()
+                    NavigationActions.BACK_TO_HOME -> CreateEditFragmentDirections.backToHome()
                 }
                 findNavController().navigate(action)
                 viewModel.doneNavigation()

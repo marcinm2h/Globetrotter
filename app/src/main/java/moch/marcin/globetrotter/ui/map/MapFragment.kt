@@ -1,4 +1,4 @@
-package moch.marcin.globetrotter.ui.home
+package moch.marcin.globetrotter.ui.map
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,18 +10,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import moch.marcin.globetrotter.R
-import moch.marcin.globetrotter.databinding.FragmentHomeBinding
+import moch.marcin.globetrotter.databinding.FragmentMapBinding
 
-class HomeFragment : Fragment() {
+class MapFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentHomeBinding =
+        val binding: FragmentMapBinding =
             DataBindingUtil.inflate(
                 inflater,
-                R.layout.fragment_home, container, false
+                R.layout.fragment_map, container, false
             )
 
         val viewModel = createViewModel("Hello")
@@ -31,10 +31,7 @@ class HomeFragment : Fragment() {
         viewModel.navigationActionEvent.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 val action = when (it) {
-                    NavigationActions.BACK -> HomeFragmentDirections.back()
-                    NavigationActions.CREATE -> HomeFragmentDirections.create()
-                    NavigationActions.SHOW_DETAILS -> HomeFragmentDirections.showDetails()
-                    NavigationActions.SHOW_MAP -> HomeFragmentDirections.showMap()
+                    NavigationActions.BACK -> MapFragmentDirections.back()
                 }
                 findNavController().navigate(action)
                 viewModel.doneNavigation()
@@ -46,11 +43,11 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    private fun createViewModel(arg: String): HomeViewModel {
-        val viewModelFactory = HomeViewModelFactory(arg)
+    private fun createViewModel(arg: String): MapViewModel {
+        val viewModelFactory = MapViewModelFactory(arg)
 
         return ViewModelProviders.of(this, viewModelFactory)
-            .get(HomeViewModel::class.java)
+            .get(MapViewModel::class.java)
 
     }
 }
