@@ -13,13 +13,14 @@ import androidx.lifecycle.ViewModelProviders
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
-import moch.marcin.globetrotter.MainActivity
-import moch.marcin.globetrotter.OnLogin
 import moch.marcin.globetrotter.R
+import moch.marcin.globetrotter.Session
 import moch.marcin.globetrotter.databinding.FragmentLoginBinding
+import moch.marcin.globetrotter.service.Api
+import moch.marcin.globetrotter.service.LoginRequest
 
-class LoginFragment : Fragment(), OnLogin {
-
+class LoginFragment : Fragment() {
+    private lateinit var viewModel: LoginViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,25 +31,21 @@ class LoginFragment : Fragment(), OnLogin {
                 R.layout.fragment_login, container, false
             )
 
-        val viewModel = createViewModel("Hello")
+        viewModel = createViewModel()
 
         binding.viewModel = viewModel
 
-
-        viewModel.navigationActionEvent.observe(viewLifecycleOwner, Observer {
+        viewModel.loginEvent.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                val action = when (it) {
-//                    NavigationActions.LOGIN -> LoginFragmentDirections.login()
-//                    NavigationActions.LOGIN -> createSignInIntent()
-                    NavigationActions.LOGIN -> {
-                        when (val activity = requireActivity()) {
-                            is OnLogin -> activity.onLogin()
-                            else -> onLogin()
-                        }
-                    }
-                }
-//                findNavController().navigate(action)
-                viewModel.doneNavigation()
+                Session.instance.login(requireActivity())
+                viewModel.doneLogin()
+            }
+        })
+
+        viewModel.signInEvent.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                createSignInIntent()
+                viewModel.doneSignIn()
             }
         })
 
@@ -57,8 +54,8 @@ class LoginFragment : Fragment(), OnLogin {
         return binding.root
     }
 
-    private fun createViewModel(arg: String): LoginViewModel {
-        val viewModelFactory = LoginViewModelFactory(arg)
+    private fun createViewModel(): LoginViewModel {
+        val viewModelFactory = LoginViewModelFactory()
 
         return ViewModelProviders.of(this, viewModelFactory)
             .get(LoginViewModel::class.java)
@@ -86,10 +83,8 @@ class LoginFragment : Fragment(), OnLogin {
         if (requestCode == RC_SIGN_IN) {
             val response = IdpResponse.fromResultIntent(data)
             if (resultCode == Activity.RESULT_OK) {
-                // Successfully signed in
                 val user = FirebaseAuth.getInstance().currentUser
-                user?.uid
-                // ...
+                viewModel.auth(requireNotNull(user).uid)
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
@@ -101,9 +96,5 @@ class LoginFragment : Fragment(), OnLogin {
 
     companion object {
         private const val RC_SIGN_IN = 123
-    }
-
-    override fun onLogin() {
-        TODO("not implemented")
     }
 }
