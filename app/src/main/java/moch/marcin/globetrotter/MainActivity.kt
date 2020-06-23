@@ -16,7 +16,13 @@ class MainActivity : AppCompatActivity() {
                 activity.startActivity(intent)
                 activity.finish()
             }
+            override fun onLogout(activity: Activity) {
+                val intent = Intent(activity, MainActivity::class.java)
+                activity.startActivity(intent)
+                activity.finish()
+            }
         })
+        session.currentActivity = this
 
         if (!session.loggedIn) {
             return redirectToLogin()

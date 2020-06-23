@@ -11,17 +11,17 @@ class LoginViewModel() : ViewModel() {
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private val _loginEvent = MutableLiveData<Boolean?>()
+    private val _loginEvent = MutableLiveData<String?>()
 
-    val loginEvent: LiveData<Boolean?>
+    val loginEvent: LiveData<String?>
         get() = _loginEvent
 
     fun doneLogin() {
         _loginEvent.value = null
     }
 
-    fun onLogin() {
-        _loginEvent.value = true;
+    fun onLogin(token: String) {
+        _loginEvent.value = token;
     }
 
     private val _signInEvent = MutableLiveData<Boolean?>()
@@ -42,7 +42,7 @@ class LoginViewModel() : ViewModel() {
             val responseDeferred = Api.authService.loginAsync(LoginRequest(userId))
             try {
                 val response = responseDeferred.await()
-                println(response.data.token)
+                onLogin(response.data.token)
             } catch (e: Exception) {
                 println(e)
             }

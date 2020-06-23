@@ -7,7 +7,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import moch.marcin.globetrotter.Session
 import moch.marcin.globetrotter.service.Api
+import moch.marcin.globetrotter.service.PlaceRequest
 
 enum class NavigationActions {
     CREATE,
@@ -35,16 +37,85 @@ class HomeViewModel() : ViewModel() {
     }
 
     init {
-        getPlaces()
+//        getPlaces()
+//        getPlace("idtgkKgGSH")
+//        putPlace("idtgkKgGSH")
+        postPlace()
     }
 
     private fun getPlaces() {
         scope.launch {
-            var getPlacesDeferred = Api.placesService.getPlaces()
+            val getPlacesDeferred = Api.placesService.getPlaces()
             try {
                 _places.value = "LOADING"
                 val result = getPlacesDeferred.await()
-                _places.value = result
+                if (result.data.places.size > 0) {
+                    _places.value = result.data.places[0].toString()
+                } else {
+                    _places.value = "Pusta tablica"
+                }
+            } catch (e: Exception) {
+                _places.value = "ERROR"
+            }
+        }
+    }
+
+    private fun getPlace(placeId: String) {
+        scope.launch {
+            val getPlacesDeferred = Api.placesService.getPlace(placeId)
+            try {
+                _places.value = "LOADING"
+                val result = getPlacesDeferred.await()
+                _places.value = result.data.place.toString()
+            } catch (e: Exception) {
+                _places.value = "ERROR"
+            }
+        }
+    }
+
+    private fun putPlace(placeId: String) {
+        scope.launch {
+            val putPlaceDeferred = Api.placesService.putPlace(placeId, PlaceRequest(
+                description = "dupa",
+                photo = "photo",
+                radius = 2,
+                title = "dupa"
+            ))
+            try {
+                _places.value = "LOADING"
+                val result = putPlaceDeferred.await()
+                _places.value = result.data.place.toString()
+            } catch (e: Exception) {
+                _places.value = "ERROR"
+            }
+        }
+    }
+
+    private fun deletePlace(placeId: String) {
+        scope.launch {
+            val deletePlaceDeferred = Api.placesService.deletePlace(placeId)
+            try {
+                _places.value = "LOADING"
+                val result = deletePlaceDeferred.await()
+                _places.value = result.data.place.toString()
+            } catch (e: Exception) {
+                _places.value = "ERROR"
+            }
+        }
+    }
+
+    private fun postPlace() {
+        scope.launch {
+            val postPlaceDeferred = Api.placesService.postPlace(PlaceRequest(
+                description = "dupa",
+                photo = "photo",
+                radius = 2,
+                title = "dupa"
+            ))
+            try {
+                _places.value = "LOADING"
+                val result = postPlaceDeferred.await()
+                _places.value = result.data.place.toString()
             } catch (e: Exception) {
                 _places.value = "ERROR"
             }
@@ -66,5 +137,9 @@ class HomeViewModel() : ViewModel() {
 
     fun onCreate() {
         _navigationActionEvent.value = NavigationActions.CREATE
+    }
+
+    fun onLogOut() {
+        Session.instance.logout()
     }
 }

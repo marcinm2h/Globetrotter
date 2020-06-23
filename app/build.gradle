@@ -45,6 +45,10 @@ android {
         experimental = true
     }
 
+    defaultConfig {
+        resConfigs "pl"
+    }
+
 }
 
 dependencies {
@@ -79,6 +83,9 @@ dependencies {
 
     // Retrofit Coroutines Support
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$version_retrofit_coroutines_adapter"
+
+    // OkHttpClient
+    implementation 'com.squareup.okhttp3:okhttp:4.2.1'
 
     // Firebase
     implementation 'com.google.firebase:firebase-analytics:17.2.2'

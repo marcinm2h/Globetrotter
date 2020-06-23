@@ -8,10 +8,6 @@ data class Token(
     val token: String
 )
 
-data class Response<T>(
-    val data: T
-)
-
 data class LoginRequest(
     val userId: String
 )

@@ -37,7 +37,7 @@ class LoginFragment : Fragment() {
 
         viewModel.loginEvent.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                Session.instance.login(requireActivity())
+                Session.instance.login(it)
                 viewModel.doneLogin()
             }
         })
