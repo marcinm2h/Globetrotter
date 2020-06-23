@@ -1,6 +1,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Globetrotter</string>
-
+    <!-- START FireBaseUI -->
     <string name="fui_progress_dialog_loading">Wczytuję…</string>
     <string name="fui_sign_in_default">Zaloguj się</string>
     <string name="fui_cancel">Anuluj</string>
@@ -97,4 +97,13 @@
     <string name="fui_verify_phone_number">Zweryfikuj numer telefonu</string>
     <string name="fui_sms_terms_of_service">Gdy klikniesz „%1$s”, może zostać wysłany SMS. Może to skutkować pobraniem opłaty za przesłanie wiadomości i danych.</string>
     <string name="fui_sms_terms_of_service_and_privacy_policy_extended">Klikając „%1$s”, potwierdzasz, że akceptujesz te dokumenty: %2$s i %3$s. Może zostać wysłany SMS. Może to skutkować pobraniem opłat za przesłanie wiadomości i danych.</string>
+    <!-- END FireBaseUI -->
+    <string name="back">Wstecz</string>
+    <string name="edit">Edytuj</string>
+    <string name="edit_title">Zmień miejsce</string>
+    <string name="add_title">Dodaj miejsce</string>
+    <string name="title">Nazwa</string>
+    <string name="radius">Promień zasięgu (w km)</string>
+    <string name="description">Opis</string>
+    <string name="submit">Zapisz</string>
 </resources>
