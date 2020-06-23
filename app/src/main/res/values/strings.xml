@@ -106,4 +106,5 @@
     <string name="radius">Promień zasięgu (w km)</string>
     <string name="description">Opis</string>
     <string name="submit">Zapisz</string>
+    <string name="photo_info">Przytrzymaj zdjęcie by usunąć</string>
 </resources>
