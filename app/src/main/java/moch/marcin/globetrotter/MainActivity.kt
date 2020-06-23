@@ -3,6 +3,8 @@ package moch.marcin.globetrotter
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -16,6 +18,7 @@ class MainActivity : AppCompatActivity() {
                 activity.startActivity(intent)
                 activity.finish()
             }
+
             override fun onLogout(activity: Activity) {
                 val intent = Intent(activity, MainActivity::class.java)
                 activity.startActivity(intent)
@@ -35,5 +38,19 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_logout -> {
+            Session.instance.logout()
+            true
+        }
+        else -> true
     }
 }

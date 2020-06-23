@@ -1,9 +1,9 @@
 package moch.marcin.globetrotter.ui.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.ContextMenu.ContextMenuInfo
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -12,7 +12,9 @@ import androidx.navigation.fragment.findNavController
 import moch.marcin.globetrotter.R
 import moch.marcin.globetrotter.databinding.FragmentHomeBinding
 
+
 class HomeFragment : Fragment() {
+    private lateinit var viewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,7 +26,7 @@ class HomeFragment : Fragment() {
                 R.layout.fragment_home, container, false
             )
 
-        val viewModel = createViewModel()
+        viewModel = createViewModel()
 
         binding.viewModel = viewModel
 
