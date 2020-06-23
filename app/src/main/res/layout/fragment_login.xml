@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <Button
-                android:id="@+id/actionButton"
+                android:id="@+id/createButton"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:text="@string/login"

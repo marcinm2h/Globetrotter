@@ -111,4 +111,7 @@
     <string name="globetrotter">Globetrotter</string>
     <string name="login">Zaloguj się</string>
     <string name="logout">Wyloguj</string>
+    <string name="your_places">Twoje miejsca</string>
+    <string name="map">Mapa</string>
+    <string name="create">Dodaj miejsce</string>
 </resources>

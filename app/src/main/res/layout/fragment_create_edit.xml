@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <Button
-                android:id="@+id/backButton"
+                android:id="@+id/mapButton"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -34,7 +34,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/actionButton"
+                android:id="@+id/createButton"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
