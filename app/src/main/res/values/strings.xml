@@ -108,4 +108,6 @@
     <string name="submit">Zapisz</string>
     <string name="photo_info">Przytrzymaj zdjęcie by usunąć</string>
     <string name="description_title">Szczegóły</string>
+    <string name="globetrotter">Globetrotter</string>
+    <string name="login">Zaloguj się</string>
 </resources>
