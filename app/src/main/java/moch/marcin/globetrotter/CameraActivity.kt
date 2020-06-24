@@ -1,10 +1,11 @@
 package moch.marcin.globetrotter
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import org.apache.commons.io.FileUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
@@ -13,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import moch.marcin.globetrotter.databinding.ActivityCameraBinding
+import org.apache.commons.io.FileUtils
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -76,8 +78,9 @@ class CameraActivity : AppCompatActivity() {
 
                 preview?.setSurfaceProvider(binding.viewFinder.createSurfaceProvider(camera?.cameraInfo))
             } catch (exc: Exception) {
-                showToast("Camera crashed")
-                finish()
+                val message = "Camera crashed"
+                showToast(message)
+                finishWithError(message)
             }
 
         }, ContextCompat.getMainExecutor(this))
@@ -109,9 +112,9 @@ class CameraActivity : AppCompatActivity() {
                     val encodedString =
                         getEncoder().encodeToString(fileContent)
                     // FIXME: remove file after encoding
-
                     showToast("Photo capture succeeded: $savedUri")
-                    // TODO: navigate back with results
+
+                    finishWithResult(encodedString)
                 }
             })
     }
@@ -138,8 +141,9 @@ class CameraActivity : AppCompatActivity() {
             if (allPermissionsGranted()) {
                 startCamera()
             } else {
-                showToast("Permissions not granted by the user.")
-                finish()
+                val message = "Permissions not granted by the user"
+                showToast(message)
+                finishWithError(message)
             }
         }
     }
@@ -148,9 +152,25 @@ class CameraActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
+    private fun finishWithResult(result: String) {
+        val returnIntent = Intent()
+        returnIntent.putExtra(INTENT_EXTRA_KEY_RESULT, result)
+        setResult(Activity.RESULT_OK, returnIntent)
+        finish()
+    }
+
+    private fun finishWithError(message: String) {
+        val returnIntent = Intent()
+        returnIntent.putExtra(INTENT_EXTRA_KEY_ERROR, message)
+        setResult(Activity.RESULT_CANCELED, returnIntent)
+        finish()
+    }
+
     companion object {
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        const val INTENT_EXTRA_KEY_RESULT = "result"
+        const val INTENT_EXTRA_KEY_ERROR = "error"
     }
 }
