@@ -9,12 +9,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import moch.marcin.globetrotter.Session
 import moch.marcin.globetrotter.service.Api
+import moch.marcin.globetrotter.service.Place
 import moch.marcin.globetrotter.service.PlaceRequest
 
 enum class NavigationActions {
     CREATE,
-    SHOW_MAP,
-    SHOW_DETAILS,
+    SHOW_MAP
 }
 
 class HomeViewModel() : ViewModel() {
@@ -22,10 +22,15 @@ class HomeViewModel() : ViewModel() {
 
     private val scope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private val _places = MutableLiveData<String>()
+    private val _places = MutableLiveData<List<Place>>()
 
-    val places: LiveData<String>
+    val places: LiveData<List<Place>>
         get() = _places
+
+    private val _message = MutableLiveData<String>()
+
+    val message: LiveData<String>
+        get() = _message
 
     private val _navigationActionEvent = MutableLiveData<NavigationActions?>()
 
@@ -37,38 +42,25 @@ class HomeViewModel() : ViewModel() {
     }
 
     init {
-//        getPlaces()
+        getPlaces()
 //        getPlace("idtgkKgGSH")
 //        putPlace("idtgkKgGSH")
-        postPlace()
+//        postPlace()
     }
 
     private fun getPlaces() {
         scope.launch {
             val getPlacesDeferred = Api.placesService.getPlaces()
             try {
-                _places.value = "LOADING"
+                _message.value = "LOADING"
                 val result = getPlacesDeferred.await()
-                if (result.data.places.size > 0) {
-                    _places.value = result.data.places[0].toString()
+                if (result.data.places.isNotEmpty()) {
+                    _places.value = result.data.places
                 } else {
-                    _places.value = "Pusta tablica"
+                    _places.value = ArrayList()
                 }
             } catch (e: Exception) {
-                _places.value = "ERROR"
-            }
-        }
-    }
-
-    private fun getPlace(placeId: String) {
-        scope.launch {
-            val getPlacesDeferred = Api.placesService.getPlace(placeId)
-            try {
-                _places.value = "LOADING"
-                val result = getPlacesDeferred.await()
-                _places.value = result.data.place.toString()
-            } catch (e: Exception) {
-                _places.value = "ERROR"
+                _message.value = "ERROR"
             }
         }
     }
@@ -82,11 +74,11 @@ class HomeViewModel() : ViewModel() {
                 title = "dupa"
             ))
             try {
-                _places.value = "LOADING"
+                _message.value = "LOADING"
                 val result = putPlaceDeferred.await()
-                _places.value = result.data.place.toString()
+                _message.value = result.data.place.toString()
             } catch (e: Exception) {
-                _places.value = "ERROR"
+                _message.value = "ERROR"
             }
         }
     }
@@ -95,11 +87,11 @@ class HomeViewModel() : ViewModel() {
         scope.launch {
             val deletePlaceDeferred = Api.placesService.deletePlace(placeId)
             try {
-                _places.value = "LOADING"
+                _message.value = "LOADING"
                 val result = deletePlaceDeferred.await()
-                _places.value = result.data.place.toString()
+                _message.value = result.data.place.toString()
             } catch (e: Exception) {
-                _places.value = "ERROR"
+                _message.value = "ERROR"
             }
         }
     }
@@ -113,11 +105,11 @@ class HomeViewModel() : ViewModel() {
                 title = "dupa"
             ))
             try {
-                _places.value = "LOADING"
+                _message.value = "LOADING"
                 val result = postPlaceDeferred.await()
-                _places.value = result.data.place.toString()
+                _message.value = result.data.place.toString()
             } catch (e: Exception) {
-                _places.value = "ERROR"
+                _message.value = "ERROR"
             }
         }
     }
@@ -125,10 +117,6 @@ class HomeViewModel() : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
-    }
-
-    fun onShowDetails() {
-        _navigationActionEvent.value = NavigationActions.SHOW_DETAILS
     }
 
     fun onShowMap() {

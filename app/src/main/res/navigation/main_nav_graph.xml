@@ -31,6 +31,9 @@
         <action
             android:id="@+id/edit"
             app:destination="@id/createEditFragment" />
+        <argument
+            android:name="placeId"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/createEditFragment"
@@ -43,6 +46,10 @@
         <action
             android:id="@+id/backToHome"
             app:destination="@id/homeFragment" />
+        <argument
+            android:name="placeId"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/mapFragment"

@@ -1,40 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="place"
+            type="moch.marcin.globetrotter.service.Place" />
+    </data>
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/photo"
             android:layout_width="0dp"
             android:layout_height="100dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_image_black_24dp" />
+            app:srcCompat="@drawable/ic_image_black_24dp"
+            />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            tools:text="Nazwa miejsca"
+            android:text="@{place.title}"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+            app:layout_constraintTop_toBottomOf="@+id/photo"
+            tools:text="Nazwa miejsca" />
 
         <TextView
             android:id="@+id/radius"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            tools:text="Obszar: 20km"
+            app:radius="@{place.radius}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name" />
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            tools:text="Obszar: 20km" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

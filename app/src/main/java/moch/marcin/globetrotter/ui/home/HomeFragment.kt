@@ -1,9 +1,9 @@
 package moch.marcin.globetrotter.ui.home
 
 import android.os.Bundle
-import android.view.*
-import android.view.ContextMenu.ContextMenuInfo
-import android.widget.Toast
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -30,11 +30,14 @@ class HomeFragment : Fragment() {
 
         binding.viewModel = viewModel
 
+        binding.placesGrid.adapter = PlaceGridAdapter(PlaceGridAdapter.OnClickListener {
+            findNavController().navigate(HomeFragmentDirections.showDetails(requireNotNull(it.id)))
+        })
+
         viewModel.navigationActionEvent.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 val action = when (it) {
-                    NavigationActions.CREATE -> HomeFragmentDirections.create()
-                    NavigationActions.SHOW_DETAILS -> HomeFragmentDirections.showDetails()
+                    NavigationActions.CREATE -> HomeFragmentDirections.create(null)
                     NavigationActions.SHOW_MAP -> HomeFragmentDirections.showMap()
                 }
                 findNavController().navigate(action)
