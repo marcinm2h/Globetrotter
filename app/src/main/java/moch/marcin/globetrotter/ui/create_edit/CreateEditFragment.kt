@@ -1,9 +1,14 @@
 package moch.marcin.globetrotter.ui.create_edit
 
+import android.content.Context
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -43,9 +48,21 @@ class CreateEditFragment : Fragment() {
             }
         })
 
+        viewModel.currentLocation.observe(viewLifecycleOwner, Observer {
+            if (it != null && it) {
+                showToast(R.string.location_message)
+            }
+        })
+
         binding.setLifecycleOwner(this)
 
         return binding.root
+    }
+
+    fun showToast(message: Int) {
+        val duration = Toast.LENGTH_SHORT
+        val toast = Toast.makeText(requireContext(), requireContext().getString(message), duration)
+        toast.show()
     }
 
     private fun createViewModel(placeId: String?): CreateEditViewModel {

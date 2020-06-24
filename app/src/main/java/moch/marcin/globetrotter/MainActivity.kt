@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -52,5 +53,11 @@ class MainActivity : AppCompatActivity() {
             true
         }
         else -> true
+    }
+
+    fun showToast(message: String) {
+        val duration = Toast.LENGTH_SHORT
+        val toast = Toast.makeText(applicationContext, message, duration)
+        toast.show()
     }
 }

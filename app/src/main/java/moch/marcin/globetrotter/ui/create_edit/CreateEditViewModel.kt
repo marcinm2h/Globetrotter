@@ -36,6 +36,11 @@ class CreateEditViewModel(private val placeId: String?) : ViewModel() {
     val editMode: LiveData<Boolean>
         get() = _editMode
 
+
+    val currentLocation = MutableLiveData<Boolean>()
+
+    var location: String? = null
+
     val description = MutableLiveData<String>()
 
     val title = MutableLiveData<String>()
@@ -166,5 +171,9 @@ class CreateEditViewModel(private val placeId: String?) : ViewModel() {
 
     fun onBackToHome() {
         _navigationActionEvent.value = NavigationActions.BACK_TO_HOME;
+    }
+
+    fun toggleLocation() {
+        currentLocation.value = currentLocation.value != true
     }
 }
