@@ -111,8 +111,6 @@ class CameraActivity : AppCompatActivity() {
                     val encodedString =
                         getEncoder().encodeToString(fileContent)
                     // FIXME: remove file after encoding
-                    showToast("Photo capture succeeded: $savedUri")
-
                     finishWithResult(encodedString)
                 }
             })

@@ -17,6 +17,7 @@ import moch.marcin.globetrotter.CameraActivity
 import moch.marcin.globetrotter.R
 import moch.marcin.globetrotter.databinding.FragmentCreateEditBinding
 
+
 class CreateEditFragment : Fragment() {
     private val args: CreateEditFragmentArgs by navArgs()
     private var onPhotoResult: (photoBase64: String) -> Unit = {
