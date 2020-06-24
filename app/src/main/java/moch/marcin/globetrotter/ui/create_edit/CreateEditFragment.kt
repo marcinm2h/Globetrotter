@@ -1,9 +1,7 @@
 package moch.marcin.globetrotter.ui.create_edit
 
-import android.content.Context
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,11 +13,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import moch.marcin.globetrotter.CameraActivity
 import moch.marcin.globetrotter.R
 import moch.marcin.globetrotter.databinding.FragmentCreateEditBinding
 
 class CreateEditFragment : Fragment() {
     private val args: CreateEditFragmentArgs by navArgs()
+    private var onPhotoResult: (photoBase64: String) -> Unit = {
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,19 +55,20 @@ class CreateEditFragment : Fragment() {
             }
         })
 
+        viewModel.photoChangeEvent.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                openCameraActivity { photo ->
+                    viewModel.photo.value = photo
+                }
+            }
+        })
+
         binding.setLifecycleOwner(this)
-//
-//        val imageCapture = ImageCapture.Builder()
-//            .setTargetRotation(view.display.rotation)
-//            .build()
-//
-//        cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, imageCapture,
-//            imageAnalysis, preview)
 
         return binding.root
     }
 
-    fun showToast(message: Int) {
+    private fun showToast(message: Int) {
         val duration = Toast.LENGTH_SHORT
         val toast = Toast.makeText(requireContext(), requireContext().getString(message), duration)
         toast.show()
@@ -78,5 +80,27 @@ class CreateEditFragment : Fragment() {
         return ViewModelProviders.of(this, viewModelFactory)
             .get(CreateEditViewModel::class.java)
 
+    }
+
+    private fun openCameraActivity(onSuccess: (photoBase64: String) -> Unit) {
+        onPhotoResult = onSuccess
+        val intent = Intent(activity, CameraActivity::class.java)
+        startActivityForResult(intent, REQUEST_CODE_CAMERA)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_CAMERA) {
+            if (resultCode == Activity.RESULT_OK) {
+                val result = data?.getStringExtra(CameraActivity.INTENT_EXTRA_KEY_RESULT)
+                if (result != null) {
+                    onPhotoResult(result)
+                }
+            }
+        }
+    }
+
+    companion object {
+        private const val REQUEST_CODE_CAMERA = 99
     }
 }

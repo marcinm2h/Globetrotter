@@ -58,6 +58,14 @@ class CreateEditViewModel(private val placeId: String?) : ViewModel() {
         _navigationActionEvent.value = null
     }
 
+    private val _photoChangeEvent = MutableLiveData<Boolean>()
+
+    val photoChangeEvent: LiveData<Boolean>
+        get() = _photoChangeEvent
+
+    fun donePhotoChange() {
+        _photoChangeEvent.value = null
+    }
 
     init {
         if (placeId == null) {
@@ -175,5 +183,18 @@ class CreateEditViewModel(private val placeId: String?) : ViewModel() {
 
     fun toggleLocation() {
         currentLocation.value = currentLocation.value != true
+    }
+
+    fun onPhotoChange() {
+        _photoChangeEvent.value = true
+    }
+
+    fun onLongClick(): Boolean {
+        onPhotoRemove()
+        return  true
+    }
+
+    private fun onPhotoRemove() {
+        photo.value = null
     }
 }
