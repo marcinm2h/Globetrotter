@@ -116,4 +116,5 @@
     <string name="create">Dodaj miejsce</string>
     <string name="delete">Usuń</string>
     <string name="location_message">Pobieranie obecnej lokalizacji użytkownika</string>
+    <string name="take_a_picture">Zrób zdjęcie</string>
 </resources>

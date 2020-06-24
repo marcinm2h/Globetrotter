@@ -39,14 +39,12 @@ class CameraActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_camera)
 
-        binding.cameraButton.setOnClickListener {
-            if (allPermissionsGranted()) {
-                startCamera()
-            } else {
-                ActivityCompat.requestPermissions(
-                    this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
-                )
-            }
+        if (allPermissionsGranted()) {
+            startCamera()
+        } else {
+            ActivityCompat.requestPermissions(
+                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+            )
         }
 
         binding.captureButton.setOnClickListener {
@@ -67,7 +65,8 @@ class CameraActivity : AppCompatActivity() {
                 .build()
 
             val cameraSelector =
-                CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build() // back camera
+                CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                    .build() // back camera
 
             try {
                 cameraProvider.unbindAll()

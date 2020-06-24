@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
         if (!session.loggedIn) {
             return redirectToLogin()
         }
-        openCameraActivity()
 
         setContentView(R.layout.activity_main)
     }
@@ -39,11 +38,6 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
-    }
-
-    private fun openCameraActivity() {
-        val intent = Intent(this, CameraActivity::class.java)
-        startActivityForResult(intent, REQUEST_CODE_CAMERA)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -58,21 +52,5 @@ class MainActivity : AppCompatActivity() {
             true
         }
         else -> true
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_CAMERA) {
-            if (resultCode == Activity.RESULT_OK) {
-                val result = data?.getStringExtra(CameraActivity.INTENT_EXTRA_KEY_RESULT)
-                println(result)
-            } else {
-                // TODO
-            }
-        }
-    }
-
-    companion object {
-        private const val REQUEST_CODE_CAMERA = 99
     }
 }
