@@ -55,6 +55,13 @@ class CreateEditFragment : Fragment() {
         })
 
         binding.setLifecycleOwner(this)
+//
+//        val imageCapture = ImageCapture.Builder()
+//            .setTargetRotation(view.display.rotation)
+//            .build()
+//
+//        cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, imageCapture,
+//            imageAnalysis, preview)
 
         return binding.root
     }

@@ -7,35 +7,42 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : AppCompatActivity() {
+val sessionActions = object : Actions {
+    override fun onLogin(activity: Activity) {
+        val intent = Intent(activity, MainActivity::class.java)
+        activity.startActivity(intent)
+        activity.finish()
+    }
 
+    override fun onLogout(activity: Activity) {
+        val intent = Intent(activity, MainActivity::class.java)
+        activity.startActivity(intent)
+        activity.finish()
+    }
+}
+
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val session = Session.create(applicationContext, object : Actions {
-            override fun onLogin(activity: Activity) {
-                val intent = Intent(activity, MainActivity::class.java)
-                activity.startActivity(intent)
-                activity.finish()
-            }
-
-            override fun onLogout(activity: Activity) {
-                val intent = Intent(activity, MainActivity::class.java)
-                activity.startActivity(intent)
-                activity.finish()
-            }
-        })
+        val session = Session.create(applicationContext, sessionActions)
         session.currentActivity = this
-
         if (!session.loggedIn) {
             return redirectToLogin()
         }
+        openCameraActivity()
 
         setContentView(R.layout.activity_main)
     }
 
     private fun redirectToLogin() {
         val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun openCameraActivity() {
+        val intent = Intent(this, CameraActivity::class.java)
         startActivity(intent)
         finish()
     }

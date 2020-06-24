@@ -16,8 +16,6 @@ import com.google.firebase.auth.FirebaseAuth
 import moch.marcin.globetrotter.R
 import moch.marcin.globetrotter.Session
 import moch.marcin.globetrotter.databinding.FragmentLoginBinding
-import moch.marcin.globetrotter.service.Api
-import moch.marcin.globetrotter.service.LoginRequest
 
 class LoginFragment : Fragment() {
     private lateinit var viewModel: LoginViewModel
@@ -74,13 +72,13 @@ class LoginFragment : Fragment() {
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
                 .build(),
-            RC_SIGN_IN
+            REQUEST_CODE_SIGN_IN
         )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == REQUEST_CODE_SIGN_IN) {
             val response = IdpResponse.fromResultIntent(data)
             if (resultCode == Activity.RESULT_OK) {
                 val user = FirebaseAuth.getInstance().currentUser
@@ -95,6 +93,6 @@ class LoginFragment : Fragment() {
     }
 
     companion object {
-        private const val RC_SIGN_IN = 123
+        private const val REQUEST_CODE_SIGN_IN = 123
     }
 }
