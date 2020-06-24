@@ -4,8 +4,8 @@ import kotlinx.coroutines.Deferred
 import retrofit2.http.*
 
 data class Place(
-    val id: String?,
-    val ownerId: String?,
+    val id: String,
+    val ownerId: String,
     val title: String,
     val description: String,
     val radius: Int,

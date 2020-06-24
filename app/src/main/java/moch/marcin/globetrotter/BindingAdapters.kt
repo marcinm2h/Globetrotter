@@ -1,5 +1,6 @@
 package moch.marcin.globetrotter
 
+import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -18,4 +19,10 @@ fun TextView.setRadius(item: Int?) {
     item?.let {
         text = "%d km".format(item)
     }
+}
+
+// https://developer.android.com/topic/libraries/data-binding/index.html
+@BindingAdapter("goneUnless")
+fun goneUnless(view: View, visible: Boolean) {
+    view.visibility = if (visible) View.VISIBLE else View.GONE
 }

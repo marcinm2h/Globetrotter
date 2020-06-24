@@ -114,4 +114,5 @@
     <string name="your_places">Twoje miejsca</string>
     <string name="map">Mapa</string>
     <string name="create">Dodaj miejsce</string>
+    <string name="delete">Usuń</string>
 </resources>

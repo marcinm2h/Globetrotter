@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="moch.marcin.globetrotter.ui.details.DetailsViewModel" />
@@ -14,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeFragment">
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/body"
@@ -28,8 +30,8 @@
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:text="@string/back"
                 android:onClick="@{() -> viewModel.onBack()}"
+                android:text="@string/back"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -39,8 +41,8 @@
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
-                android:text="@string/edit"
                 android:onClick="@{() -> viewModel.onEdit()}"
+                android:text="@string/edit"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -104,12 +106,13 @@
                 android:layout_marginTop="48dp"
                 android:layout_marginEnd="8dp"
                 android:text="@{viewModel.place.title}"
-                tools:text="Miejsce numer jeden"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/photo" />
+                app:layout_constraintTop_toBottomOf="@+id/photo"
+                tools:text="Miejsce numer jeden" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

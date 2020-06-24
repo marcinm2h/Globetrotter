@@ -8,7 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import moch.marcin.globetrotter.service.Api
-import moch.marcin.globetrotter.service.Place
 import moch.marcin.globetrotter.service.PlaceRequest
 
 enum class NavigationActions {
@@ -37,11 +36,13 @@ class CreateEditViewModel(private val placeId: String?) : ViewModel() {
     val editMode: LiveData<Boolean>
         get() = _editMode
 
+    val description = MutableLiveData<String>()
 
-    private val _place = MutableLiveData<Place>()
+    val title = MutableLiveData<String>()
 
-    val place: LiveData<Place>
-        get() = _place
+    val photo = MutableLiveData<String?>()
+
+    val radius = MutableLiveData<String>()
 
     private val _navigationActionEvent = MutableLiveData<NavigationActions?>()
 
@@ -56,14 +57,6 @@ class CreateEditViewModel(private val placeId: String?) : ViewModel() {
     init {
         if (placeId == null) {
             _editMode.value = false
-            _place.value = Place(
-                description = "",
-                title = "",
-                radius = 0,
-                photo = null,
-                id = null,
-                ownerId = null
-            )
         } else {
             _editMode.value = true
             getPlace(placeId)
@@ -75,58 +68,75 @@ class CreateEditViewModel(private val placeId: String?) : ViewModel() {
             val getPlaceDeferred = Api.placesService.getPlace(placeId)
             try {
                 _status.value = Status.LOADING
+
                 val result = getPlaceDeferred.await()
-                _place.value = result.data.place
+                val place = result.data.place
+                description.value = place.description
+                title.value = place.title
+                photo.value = place.photo
+                radius.value = place.radius.toString()
+
                 _status.value = Status.SUCCESS
             } catch (e: Exception) {
-                _place.value = null
                 _status.value = Status.ERROR
             }
         }
     }
 
-    private fun putPlace(placeId: String) {
+    private fun putPlace(placeId: String, onSuccess: () -> Unit) {
         scope.launch {
-            val place = requireNotNull(_place.value)
             val putPlaceDeferred = Api.placesService.putPlace(
                 placeId,
                 PlaceRequest(
-                    title = place.title,
-                    description = place.description,
-                    radius = place.radius,
-                    photo = place.photo
+                    title = requireNotNull(title.value),
+                    description = requireNotNull(description.value),
+                    radius = requireNotNull(radius.value).toInt(),
+                    photo = photo.value
                 )
             )
             try {
                 _status.value = Status.LOADING
-                val result = putPlaceDeferred.await()
-                _place.value = result.data.place
+                putPlaceDeferred.await()
                 _status.value = Status.SUCCESS
+                onSuccess()
             } catch (e: Exception) {
-                _place.value = null
                 _status.value = Status.ERROR
             }
         }
     }
 
-    private fun postPlace() {
+    private fun postPlace(onSuccess: () -> Unit) {
         scope.launch {
-            val place = requireNotNull(_place.value)
             val postPlaceDeferred = Api.placesService.postPlace(
                 PlaceRequest(
-                    title = place.title,
-                    description = place.description,
-                    radius = place.radius,
-                    photo = place.photo
+                    title = requireNotNull(title.value),
+                    description = requireNotNull(description.value),
+                    radius = requireNotNull(radius.value).toInt(),
+                    photo = photo.value
                 )
             )
             try {
                 _status.value = Status.LOADING
-                val result = postPlaceDeferred.await()
-                _place.value = result.data.place
+                postPlaceDeferred.await()
                 _status.value = Status.SUCCESS
+                onSuccess()
             } catch (e: Exception) {
-                _place.value = null
+                _status.value = Status.ERROR
+            }
+        }
+    }
+
+    private fun deletePlace(onSuccess: () -> Unit) {
+        scope.launch {
+            val deletePlaceDeferred = Api.placesService.deletePlace(
+                requireNotNull(placeId)
+            )
+            try {
+                _status.value = Status.LOADING
+                deletePlaceDeferred.await()
+                _status.value = Status.SUCCESS
+                onSuccess()
+            } catch (e: Exception) {
                 _status.value = Status.ERROR
             }
         }
@@ -134,9 +144,19 @@ class CreateEditViewModel(private val placeId: String?) : ViewModel() {
 
     fun onSubmit() {
         if (requireNotNull(_editMode.value)) {
-            putPlace(requireNotNull(placeId))
+            putPlace(requireNotNull(placeId)) {
+                onBackToDetails()
+            }
         } else {
-            postPlace()
+            postPlace {
+                onBackToHome()
+            }
+        }
+    }
+
+    fun onDelete() {
+        deletePlace {
+            onBackToHome()
         }
     }
 
