@@ -64,6 +64,12 @@ class CreateEditFragment : Fragment() {
             }
         })
 
+        viewModel.validationErrorEvent.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                showToast(R.string.validation_error)
+            }
+        })
+
         binding.setLifecycleOwner(this)
 
         return binding.root

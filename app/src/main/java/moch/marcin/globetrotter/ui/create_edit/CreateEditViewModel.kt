@@ -39,8 +39,6 @@ class CreateEditViewModel(private val placeId: String?) : ViewModel() {
 
     val currentLocation = MutableLiveData<Boolean>()
 
-    var location: String? = null
-
     val description = MutableLiveData<String>()
 
     val title = MutableLiveData<String>()
@@ -48,6 +46,10 @@ class CreateEditViewModel(private val placeId: String?) : ViewModel() {
     val photo = MutableLiveData<String?>()
 
     val radius = MutableLiveData<String>()
+
+    val positionLat = MutableLiveData<Double>()
+
+    val positionLong = MutableLiveData<Double>()
 
     private val _navigationActionEvent = MutableLiveData<NavigationActions?>()
 
@@ -65,6 +67,15 @@ class CreateEditViewModel(private val placeId: String?) : ViewModel() {
 
     fun donePhotoChange() {
         _photoChangeEvent.value = null
+    }
+
+    private val _validationErrorEvent = MutableLiveData<Boolean>()
+
+    val validationErrorEvent: LiveData<Boolean>
+        get() = _validationErrorEvent
+
+    fun doneValidationError() {
+        _validationErrorEvent.value = null
     }
 
     init {
@@ -96,17 +107,13 @@ class CreateEditViewModel(private val placeId: String?) : ViewModel() {
         }
     }
 
-    private fun putPlace(placeId: String, onSuccess: () -> Unit) {
+    private fun putPlace(placeId: String, requestBody: PlaceRequest, onSuccess: () -> Unit) {
         scope.launch {
             val putPlaceDeferred = Api.placesService.putPlace(
                 placeId,
-                PlaceRequest(
-                    title = requireNotNull(title.value),
-                    description = requireNotNull(description.value),
-                    radius = requireNotNull(radius.value).toInt(),
-                    photo = photo.value
-                )
+                requestBody
             )
+
             try {
                 _status.value = Status.LOADING
                 putPlaceDeferred.await()
@@ -118,16 +125,12 @@ class CreateEditViewModel(private val placeId: String?) : ViewModel() {
         }
     }
 
-    private fun postPlace(onSuccess: () -> Unit) {
+    private fun postPlace(requestBody: PlaceRequest, onSuccess: () -> Unit) {
         scope.launch {
             val postPlaceDeferred = Api.placesService.postPlace(
-                PlaceRequest(
-                    title = requireNotNull(title.value),
-                    description = requireNotNull(description.value),
-                    radius = requireNotNull(radius.value).toInt(),
-                    photo = photo.value
-                )
+                requestBody
             )
+
             try {
                 _status.value = Status.LOADING
                 postPlaceDeferred.await()
@@ -139,10 +142,10 @@ class CreateEditViewModel(private val placeId: String?) : ViewModel() {
         }
     }
 
-    private fun deletePlace(onSuccess: () -> Unit) {
+    private fun deletePlace(placeId: String, onSuccess: () -> Unit) {
         scope.launch {
             val deletePlaceDeferred = Api.placesService.deletePlace(
-                requireNotNull(placeId)
+                placeId
             )
             try {
                 _status.value = Status.LOADING
@@ -155,20 +158,49 @@ class CreateEditViewModel(private val placeId: String?) : ViewModel() {
         }
     }
 
+    fun isValid(): Boolean {
+        if (title.value == null) {
+            return false
+        }
+        if (description.value == null) {
+            return false
+        }
+        if (radius.value == null) {
+            return false
+        }
+        return  true
+    }
+
     fun onSubmit() {
-        if (requireNotNull(_editMode.value)) {
-            putPlace(requireNotNull(placeId)) {
+        val editMode = _editMode.value ?: return
+        if (!isValid()) {
+            _validationErrorEvent.value = true
+            return
+        }
+
+        val requestBody = PlaceRequest(
+            title = requireNotNull(title.value),
+            description = requireNotNull(description.value),
+            radius = requireNotNull(radius.value).toInt(),
+            photo = photo.value,
+            positionLat = positionLat.value ?: 37.422160, // FIXME: currposition
+            positionLong = positionLong.value ?: -122.084270 // FIXME: currposition
+        )
+
+        if (editMode) {
+            putPlace(requireNotNull(placeId), requestBody) {
                 onBackToDetails()
             }
         } else {
-            postPlace {
+            postPlace(requestBody) {
                 onBackToHome()
             }
         }
     }
 
     fun onDelete() {
-        deletePlace {
+        val placeId = placeId ?: return
+        deletePlace(placeId) {
             onBackToHome()
         }
     }
@@ -191,7 +223,7 @@ class CreateEditViewModel(private val placeId: String?) : ViewModel() {
 
     fun onLongClick(): Boolean {
         onPhotoRemove()
-        return  true
+        return true
     }
 
     private fun onPhotoRemove() {

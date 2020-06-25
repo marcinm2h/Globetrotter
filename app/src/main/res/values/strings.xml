@@ -117,4 +117,7 @@
     <string name="delete">Usuń</string>
     <string name="location_message">Pobieranie obecnej lokalizacji użytkownika</string>
     <string name="take_a_picture">Zrób zdjęcie</string>
+    <string name="title_activity_map">Mapa</string>
+    <string name="title_activity_camera">Aparat</string>
+    <string name="validation_error">Uzupełnij wszystkie wymagane pola</string>
 </resources>

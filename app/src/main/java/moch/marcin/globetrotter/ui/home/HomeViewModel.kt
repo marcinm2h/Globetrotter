@@ -43,9 +43,6 @@ class HomeViewModel() : ViewModel() {
 
     init {
         getPlaces()
-//        getPlace("idtgkKgGSH")
-//        putPlace("idtgkKgGSH")
-//        postPlace()
     }
 
     private fun getPlaces() {
@@ -59,55 +56,6 @@ class HomeViewModel() : ViewModel() {
                 } else {
                     _places.value = ArrayList()
                 }
-            } catch (e: Exception) {
-                _message.value = "ERROR"
-            }
-        }
-    }
-
-    private fun putPlace(placeId: String) {
-        scope.launch {
-            val putPlaceDeferred = Api.placesService.putPlace(placeId, PlaceRequest(
-                description = "dupa",
-                photo = "photo",
-                radius = 2,
-                title = "dupa"
-            ))
-            try {
-                _message.value = "LOADING"
-                val result = putPlaceDeferred.await()
-                _message.value = result.data.place.toString()
-            } catch (e: Exception) {
-                _message.value = "ERROR"
-            }
-        }
-    }
-
-    private fun deletePlace(placeId: String) {
-        scope.launch {
-            val deletePlaceDeferred = Api.placesService.deletePlace(placeId)
-            try {
-                _message.value = "LOADING"
-                val result = deletePlaceDeferred.await()
-                _message.value = result.data.place.toString()
-            } catch (e: Exception) {
-                _message.value = "ERROR"
-            }
-        }
-    }
-
-    private fun postPlace() {
-        scope.launch {
-            val postPlaceDeferred = Api.placesService.postPlace(PlaceRequest(
-                description = "dupa",
-                photo = "photo",
-                radius = 2,
-                title = "dupa"
-            ))
-            try {
-                _message.value = "LOADING"
-                val result = postPlaceDeferred.await()
-                _message.value = result.data.place.toString()
             } catch (e: Exception) {
                 _message.value = "ERROR"
             }

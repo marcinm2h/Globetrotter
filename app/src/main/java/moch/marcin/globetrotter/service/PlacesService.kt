@@ -9,7 +9,9 @@ data class Place(
     val title: String,
     val description: String,
     val radius: Int,
-    val photo: String?
+    val photo: String?,
+    val positionLat: Double,
+    val positionLong: Double
 )
 
 data class PlaceResponse(
@@ -24,7 +26,9 @@ data class PlaceRequest(
     val title: String,
     val description: String,
     val radius: Int,
-    val photo: String? = null
+    val photo: String? = null,
+    val positionLat: Double,
+    val positionLong: Double
 )
 
 interface PlacesService {
