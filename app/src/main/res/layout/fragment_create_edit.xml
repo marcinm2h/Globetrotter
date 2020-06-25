@@ -193,7 +193,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/photo" />
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/map"
                 android:layout_width="56dp"
                 android:layout_height="55dp"
                 android:layout_marginStart="16dp"
@@ -203,14 +203,13 @@
                 app:srcCompat="@drawable/map_off" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/location"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:layout_marginStart="24dp"
-                android:onClick="@{() -> viewModel.toggleLocation()}"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
-                app:layout_constraintTop_toTopOf="@+id/imageView"
+                app:layout_constraintBottom_toBottomOf="@+id/map"
+                app:layout_constraintStart_toEndOf="@+id/map"
+                app:layout_constraintTop_toTopOf="@+id/map"
                 tools:src="@drawable/location_on"
                 app:srcCompat="@drawable/location_on" />
 

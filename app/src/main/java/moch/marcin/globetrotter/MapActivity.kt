@@ -1,9 +1,12 @@
 package moch.marcin.globetrotter
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -17,7 +20,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import moch.marcin.globetrotter.service.Place
 import moch.marcin.globetrotter.service.Places
 import moch.marcin.globetrotter.ui.home.HomeFragment
-import java.util.*
 
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -32,8 +34,36 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         val bundle = intent.extras
-        val extra: Places? = bundle!!.getParcelable(HomeFragment.INTENT_EXTRA_KEY_PLACES)
-        places = extra?.list
+        if (bundle != null) {
+            val extra: Places? = bundle.getParcelable(HomeFragment.INTENT_EXTRA_KEY_PLACES)
+            places = extra?.list
+        }
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
+        enableMyLocation(map)
+        if (places.isNullOrEmpty()) {
+            selectLocation()
+        } else {
+            renderPlaces(places!!)
+        }
+    }
+
+    private fun selectLocation() {
+        showToast("Naciśnij dłużej aby wybrać punkt")
+        setMapLongClick(map)
+        if (isPermissionGranted()) {
+            getDeviceLocation(this, onSuccess = {
+                map.moveCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        it, 15f
+                    )
+                )
+            }, onError = {
+                showToast("Błąd")
+            })
+        }
     }
 
     private fun renderPlace(place: Place) {
@@ -53,36 +83,18 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         )
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
-//        setMapLongClick(mMap)
-////        mMap.setOnMarkerClickListener {
-////            false
-////        }
-        enableMyLocation(map)
-        val list = if (places.isNullOrEmpty()) return else places!!
-        list.forEach {
+    private fun renderPlaces(places: List<Place>) {
+        places.forEach {
             renderPlace(it)
         }
-        val first = list.first()
+        val first = places.first()
         val latLng = LatLng(first.positionLat, first.positionLong)
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
     }
 
     private fun setMapLongClick(map: GoogleMap) {
         map.setOnMapLongClickListener { latLng ->
-            val snippet = String.format(
-                Locale.getDefault(),
-                "Lat: %1$.5f, Long: %2$.5f",
-                latLng.latitude,
-                latLng.longitude
-            )
-            map.addMarker(
-                MarkerOptions()
-                    .position(latLng)
-                    .title("Aktualne miejsce")
-                    .snippet(snippet)
-            )
+            finishWithResult(latLng)
         }
     }
 
@@ -108,7 +120,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
-        grantResults: IntArray) {
+        grantResults: IntArray
+    ) {
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.contains(PackageManager.PERMISSION_GRANTED)) {
                 enableMyLocation(map)
@@ -116,8 +129,23 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+
+    private fun finishWithResult(latLng: LatLng) {
+        val returnIntent = Intent()
+        returnIntent.putExtra(INTENT_EXTRA_KEY_POSITION_LAT, latLng.latitude)
+        returnIntent.putExtra(INTENT_EXTRA_KEY_POSITION_LONG, latLng.longitude)
+        setResult(Activity.RESULT_OK, returnIntent)
+        finish()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 1
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+        const val INTENT_EXTRA_KEY_POSITION_LAT = "INTENT_EXTRA_KEY_POSITION_LAT"
+        const val INTENT_EXTRA_KEY_POSITION_LONG = "INTENT_EXTRA_KEY_POSITION_LONG"
     }
 }

@@ -120,4 +120,6 @@
     <string name="title_activity_map">Mapa</string>
     <string name="title_activity_camera">Aparat</string>
     <string name="validation_error">Uzupełnij wszystkie wymagane pola</string>
+    <string name="error">Wystąpił błąd</string>
+    <string name="position_set">Pobrano pozycję urządzenia (long: %.6f, lat: %.6f)</string>
 </resources>
