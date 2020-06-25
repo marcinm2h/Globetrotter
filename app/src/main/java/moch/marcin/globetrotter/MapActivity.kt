@@ -11,11 +11,14 @@ import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import moch.marcin.globetrotter.service.Place
+import moch.marcin.globetrotter.service.Places
+import moch.marcin.globetrotter.ui.home.HomeFragment
 import java.util.*
 
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
+    var places: List<Place>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,9 +26,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.activity_map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        val bundle = intent.extras
+        val extra: Places? = bundle!!.getParcelable(HomeFragment.INTENT_EXTRA_KEY_PLACES)
+        places = extra?.list
     }
 
-    fun renderPlace(place: Place) {
+    private fun renderPlace(place: Place) {
         val latLng = LatLng(place.positionLat, place.positionLong)
         mMap.addMarker(
             MarkerOptions()
@@ -44,36 +51,17 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        val latitude = 37.422160
-        val longitude = -122.084270
-        val zoomLevel = 15f
-
-        setMapLongClick(mMap)
-
-        mMap.setOnMarkerClickListener {
-            false
+//        setMapLongClick(mMap)
+////        mMap.setOnMarkerClickListener {
+////            false
+////        }
+        val list = if (places.isNullOrEmpty()) return else places!!
+        list.forEach {
+            renderPlace(it)
         }
-
-
-        val latitude2 = 37.5
-        val longitude2 = -122.2
-
-        val homeLatLng = LatLng(latitude, longitude)
-        val homeLatLng2 = LatLng(latitude2, longitude2)
-
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLng, zoomLevel))
-        mMap.addMarker(MarkerOptions().position(homeLatLng).title("NEW MARKER"))
-//        mMap.addMarker(MarkerOptions().position(homeLatLng2).title("NEW MARKER 2"))
-
-
-        val circle = mMap.addCircle(
-            CircleOptions()
-                .center(homeLatLng)
-                .radius(300.0)
-                .strokeColor(Color.argb(150, 255, 0, 0))
-                .fillColor(Color.argb(30, 255, 0, 0))
-        )
+        val first = list.first()
+        val latLng = LatLng(first.positionLat, first.positionLong)
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
     }
 
     private fun setMapLongClick(map: GoogleMap) {

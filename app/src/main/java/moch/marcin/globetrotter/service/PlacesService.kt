@@ -1,8 +1,11 @@
 package moch.marcin.globetrotter.service;
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.Deferred
 import retrofit2.http.*
 
+@Parcelize
 data class Place(
     val id: String,
     val ownerId: String,
@@ -12,7 +15,10 @@ data class Place(
     val photo: String?,
     val positionLat: Double,
     val positionLong: Double
-)
+): Parcelable
+
+@Parcelize
+data class Places(val list: List<Place>) : Parcelable
 
 data class PlaceResponse(
     val place: Place

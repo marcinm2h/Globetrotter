@@ -14,6 +14,8 @@ import androidx.navigation.fragment.findNavController
 import moch.marcin.globetrotter.MapActivity
 import moch.marcin.globetrotter.R
 import moch.marcin.globetrotter.databinding.FragmentHomeBinding
+import moch.marcin.globetrotter.service.Places
+
 
 class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
@@ -51,7 +53,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun redirectToMap() {
+        val places = viewModel.places.value ?: return
         val intent = Intent(activity, MapActivity::class.java)
+        intent.putExtra(INTENT_EXTRA_KEY_PLACES, Places(places))
         startActivity(intent)
     }
 
@@ -65,6 +69,9 @@ class HomeFragment : Fragment() {
 
         return ViewModelProviders.of(this, viewModelFactory)
             .get(HomeViewModel::class.java)
+    }
 
+    companion object {
+        const val INTENT_EXTRA_KEY_PLACES = "places"
     }
 }
