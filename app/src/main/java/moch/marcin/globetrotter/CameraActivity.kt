@@ -39,7 +39,7 @@ class CameraActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_camera)
 
-        if (allPermissionsGranted()) {
+        if (isPermissionGranted()) {
             startCamera()
         } else {
             ActivityCompat.requestPermissions(
@@ -116,7 +116,7 @@ class CameraActivity : AppCompatActivity() {
             })
     }
 
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+    private fun isPermissionGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
             baseContext, it
         ) == PackageManager.PERMISSION_GRANTED
@@ -135,7 +135,7 @@ class CameraActivity : AppCompatActivity() {
         IntArray
     ) {
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (allPermissionsGranted()) {
+            if (isPermissionGranted()) {
                 startCamera()
             } else {
                 val message = "Permissions not granted by the user"
@@ -165,7 +165,7 @@ class CameraActivity : AppCompatActivity() {
 
     companion object {
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
-        private const val REQUEST_CODE_PERMISSIONS = 10
+        private const val REQUEST_CODE_PERMISSIONS = 1
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
         const val INTENT_EXTRA_KEY_RESULT = "result"
         const val INTENT_EXTRA_KEY_ERROR = "error"

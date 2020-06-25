@@ -108,6 +108,6 @@ class CreateEditFragment : Fragment() {
     }
 
     companion object {
-        private const val REQUEST_CODE_CAMERA = 99
+        private const val REQUEST_CODE_CAMERA = 1
     }
 }

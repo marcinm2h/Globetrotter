@@ -1,8 +1,12 @@
 package moch.marcin.globetrotter
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -17,7 +21,7 @@ import java.util.*
 
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
-    private lateinit var mMap: GoogleMap
+    private lateinit var map: GoogleMap
     var places: List<Place>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,13 +38,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun renderPlace(place: Place) {
         val latLng = LatLng(place.positionLat, place.positionLong)
-        mMap.addMarker(
+        map.addMarker(
             MarkerOptions()
                 .position(latLng)
                 .title(place.title)
                 .snippet(place.description)
         )
-        val circle = mMap.addCircle(
+        val circle = map.addCircle(
             CircleOptions()
                 .center(latLng)
                 .radius(place.radius.toDouble())
@@ -50,18 +54,19 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
+        map = googleMap
 //        setMapLongClick(mMap)
 ////        mMap.setOnMarkerClickListener {
 ////            false
 ////        }
+        enableMyLocation(map)
         val list = if (places.isNullOrEmpty()) return else places!!
         list.forEach {
             renderPlace(it)
         }
         val first = list.first()
         val latLng = LatLng(first.positionLat, first.positionLong)
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
     }
 
     private fun setMapLongClick(map: GoogleMap) {
@@ -79,5 +84,40 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                     .snippet(snippet)
             )
         }
+    }
+
+    private fun enableMyLocation(map: GoogleMap) {
+        if (isPermissionGranted()) {
+            map.isMyLocationEnabled = true
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                REQUIRED_PERMISSIONS,
+                REQUEST_LOCATION_PERMISSION
+            )
+        }
+    }
+
+    private fun isPermissionGranted(): Boolean =
+        REQUIRED_PERMISSIONS.all {
+            ContextCompat.checkSelfPermission(
+                baseContext, it
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray) {
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.contains(PackageManager.PERMISSION_GRANTED)) {
+                enableMyLocation(map)
+            }
+        }
+    }
+
+    companion object {
+        private const val REQUEST_LOCATION_PERMISSION = 1
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 }
