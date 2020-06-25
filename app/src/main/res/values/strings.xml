@@ -103,7 +103,7 @@
     <string name="edit_title">Zmień miejsce</string>
     <string name="add_title">Dodaj miejsce</string>
     <string name="title">Nazwa</string>
-    <string name="radius">Promień zasięgu (w km)</string>
+    <string name="radius">Promień zasięgu (w metrach)</string>
     <string name="description">Opis</string>
     <string name="submit">Zapisz</string>
     <string name="photo_info">Przytrzymaj zdjęcie by usunąć</string>

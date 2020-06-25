@@ -1,15 +1,18 @@
 package moch.marcin.globetrotter
 
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
 import android.os.Bundle
-
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import moch.marcin.globetrotter.service.Place
 import java.util.*
+
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
@@ -22,6 +25,23 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
+    fun renderPlace(place: Place) {
+        val latLng = LatLng(place.positionLat, place.positionLong)
+        mMap.addMarker(
+            MarkerOptions()
+                .position(latLng)
+                .title(place.title)
+                .snippet(place.description)
+        )
+        val circle = mMap.addCircle(
+            CircleOptions()
+                .center(latLng)
+                .radius(place.radius.toDouble())
+                .strokeColor(Color.argb(150, 255, 0, 0))
+                .fillColor(Color.argb(30, 255, 0, 0))
+        )
+    }
+
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         val latitude = 37.422160
@@ -29,10 +49,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         val zoomLevel = 15f
 
         setMapLongClick(mMap)
-        setPoiClick(mMap)
 
         mMap.setOnMarkerClickListener {
-//            it.remove()
             false
         }
 
@@ -46,11 +64,19 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLng, zoomLevel))
         mMap.addMarker(MarkerOptions().position(homeLatLng).title("NEW MARKER"))
-        mMap.addMarker(MarkerOptions().position(homeLatLng2).title("NEW MARKER 2"))
+//        mMap.addMarker(MarkerOptions().position(homeLatLng2).title("NEW MARKER 2"))
+
+
+        val circle = mMap.addCircle(
+            CircleOptions()
+                .center(homeLatLng)
+                .radius(300.0)
+                .strokeColor(Color.argb(150, 255, 0, 0))
+                .fillColor(Color.argb(30, 255, 0, 0))
+        )
     }
 
     private fun setMapLongClick(map: GoogleMap) {
-
         map.setOnMapLongClickListener { latLng ->
             val snippet = String.format(
                 Locale.getDefault(),
@@ -64,17 +90,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                     .title("Aktualne miejsce")
                     .snippet(snippet)
             )
-        }
-    }
-
-    private fun setPoiClick(map: GoogleMap) {
-        map.setOnPoiClickListener { poi ->
-            val poiMarker = map.addMarker(
-                MarkerOptions()
-                    .position(poi.latLng)
-                    .title(poi.name)
-            )
-            poiMarker.showInfoWindow()
         }
     }
 }

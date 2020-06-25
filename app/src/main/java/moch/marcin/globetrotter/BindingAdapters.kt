@@ -20,7 +20,7 @@ fun bindRecyclerView(recyclerView: RecyclerView, data: List<Place>?) {
 @BindingAdapter("radius")
 fun TextView.setRadius(item: Int?) {
     item?.let {
-        text = "%d km".format(item)
+        text = "%d m".format(item)
     }
 }
 

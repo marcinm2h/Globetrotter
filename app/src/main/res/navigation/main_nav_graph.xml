@@ -16,9 +16,6 @@
         <action
             android:id="@+id/create"
             app:destination="@id/createEditFragment" />
-        <action
-            android:id="@+id/showMap"
-            app:destination="@id/mapFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"
@@ -50,14 +47,5 @@
             android:name="placeId"
             app:argType="string"
             app:nullable="true" />
-    </fragment>
-    <fragment
-        android:id="@+id/mapFragment"
-        android:name="moch.marcin.globetrotter.ui.map.MapFragment"
-        android:label="MapFragment"
-        tools:layout="@layout/fragment_map">
-        <action
-            android:id="@+id/back"
-            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>

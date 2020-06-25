@@ -2,6 +2,7 @@ package moch.marcin.globetrotter.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -10,7 +11,6 @@ import kotlinx.coroutines.launch
 import moch.marcin.globetrotter.Session
 import moch.marcin.globetrotter.service.Api
 import moch.marcin.globetrotter.service.Place
-import moch.marcin.globetrotter.service.PlaceRequest
 
 enum class NavigationActions {
     CREATE,
@@ -26,6 +26,12 @@ class HomeViewModel() : ViewModel() {
 
     val places: LiveData<List<Place>>
         get() = _places
+
+    val hasPlaces = Transformations.map(places) {
+        it?.let { list ->
+            list.isNotEmpty()
+        }
+    }
 
     private val _message = MutableLiveData<String>()
 
